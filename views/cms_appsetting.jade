@@ -1,0 +1,123 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_appsetting.js")
+
+block breadcrumb
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"$('#modalAddCategory').modal('show');"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Add New Category
+
+block content
+	+modal("modalDelete","Delete Category")
+		.modal-body
+			h3 Are you sure to delete this category?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmDeleteCategory();"}) OK
+	+modal("modalEditCategory","Update Category")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmEditCategory(); return false;"})
+						.form-group.has-feedback
+							label Name
+							br
+							input.form-control#nameCategoryEdit("required")&attributes({name:"nameCategoryEdit",placeholder:"Name",type:"text"})
+							br
+							label Description
+							input.form-control#descriptionCategoryEdit("required")&attributes({name:"descriptionCategoryEdit",placeholder:"Description",type:"text"})
+							br
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	+modal("modalEditSetting","Update Setting")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmEditSetting(); return false;"})
+						.form-group.has-feedback
+							label Value
+							br
+							input.form-control#valueSettingEdit("required")&attributes({name:"valueSettingEdit",placeholder:"Value",type:"text"})
+							br
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	+modal("modalAddCategory","Add Category")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmAddCategory(); return false;"})
+						.form-group.has-feedback
+							label Name
+							br
+							input.form-control#nameCategoryAdd("required")&attributes({name:"nameCategoryAdd",placeholder:"Name",type:"text"})
+							br
+							label Description
+							input.form-control#descriptionCategoryAdd("required")&attributes({name:"descriptionCategoryAdd",placeholder:"Description",type:"text"})
+							br
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	.row
+		.col-xs-12
+			.box.box-success
+				.box-header.with-border
+					h3.box-title Product Category
+				.box-body
+					table.display#listCategory&attributes({cellspacing:0,width:"100%"})
+						thead
+							tr
+								th ID
+								th CATEGORY
+								th DESCRIPTION
+								th ACTION
+					br
+					center
+						- var id = 'loadingCategory';
+						include ./template_view_loading.jade
+	.row
+		.col-xs-12
+			.box.box-success
+				.box-header.with-border
+					h3.box-title Configurable Settings
+				.box-body
+					table.display#listSetting&attributes({cellspacing:0,width:"100%"})
+						thead
+							tr
+								th ID
+								th NAME
+								th DESCRIPTION
+								th VALUE
+								th ACTION
+					br
+					center
+						- var id = 'loadingSetting';
+						include ./template_view_loading.jade
+	.row
+		.col-xs-12
+			h3 TOS
+			textarea#tos(rows="10", style="width: 100%;")= param.tos
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"updateTOS();"}) SAVE
+	.row
+		.col-xs-12
+			h3 Buyer Help
+			textarea#helpBuyer(rows="10", style="width: 100%; display: none;")= param.helpBuyer
+			input#fileHelpBuyer(type="file")
+			a(target="_blank" href="#{param.helpBuyer}") Buyer Help Instruction
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"updateHELP2Buyer();"}) SAVE
+	.row
+		.col-xs-12
+			h3 Buyer FAQ
+			textarea#faqBuyer(rows="10", style="width: 100%; display: none;")= param.faqBuyer
+			input#fileFAQBuyer(type="file")
+			a(target="_blank" href="#{param.faqBuyer}") Buyer FAQ
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"updateFAQ2Buyer();"}) SAVE
+	.row
+		.col-xs-12
+			h3 Seller Help
+			textarea#helpSeller(rows="10", style="width: 100%; display: none;")= param.helpSeller
+			input#fileHelpSeller(type="file")
+			a(target="_blank" href="#{param.helpSeller}") Seller Help Instruction
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"updateHELP2Seller();"}) SAVE
+	.row
+		.col-xs-12
+			h3 Seller FAQ
+			textarea#faqSeller(rows="10", style="width: 100%; display: none;")= param.faqSeller
+			input#fileFAQSeller(type="file")
+			a(target="_blank" href="#{param.faqSeller}") Seller FAQ
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"updateFAQ2Seller();"}) SAVE

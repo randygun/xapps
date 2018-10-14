@@ -1,0 +1,20 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_order.js")
+
+
+block content
+	.nav-tabs-custom
+		ul.nav.nav-tabs
+			li.active
+				a(href='#tab_1', data-toggle='tab') Outstanding
+			li
+				a(href='#tab_2', data-toggle='tab') Confirmation
+			li
+				a(href='#tab_2', data-toggle='tab') Complete
+		.tab-content
+			.tab-pane.active#tab_1
+				| Content 1
+			.tab-pane#tab_2
+				| Content 2

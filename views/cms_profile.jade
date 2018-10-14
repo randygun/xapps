@@ -1,0 +1,73 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_profile.js")
+
+block content
+	input#fakeusername&attributes({style:"display: none;", type:"text", name:"fakeusername"})
+	input#fakepassword&attributes({style:"display: none;", type:"password", name:"fakepassword"})
+	input#fakeavatar&attributes({style:"display: none;",type:"file",name:"fakeavatar", accept:"image/*"})
+	.row
+		.col-xs-7.col-centered
+			.box.box-primary
+				.box-body.box-profile
+					center
+						.ih-item.circle.effect19
+							a&attributes({href:"#",onclick:"avatarButton();"})
+								.img
+									img.profile-user-img.img-responsive.img-circle#avatar&attributes({alt:"User profile picture",src:param_jade.cookies.avatar})
+								.info
+									h3 Change Avatar
+									p Click to change avatar
+					br
+					.progress&attributes({style:"display: none;"})
+						.progress-bar
+					h3.profile-username.text-center= param_jade.cookies.username
+					p.text-muted.text-center= param_jade.cookies.description_role
+					ul.list-group.list-group-unbordered
+						li.list-group-item
+							b Member Since
+							a.pull-right#user_member_since&attributes({href:"#membersince"})
+						li.list-group-item
+							b Last Update
+							a.pull-right#user_last_update&attributes({href:"#lastupdate"})
+						li.list-group-item
+							b Email / Username
+							a.pull-right&attributes({href:"#username","data-toggle":"modal", "data-target":"#usernameModal"})= param_jade.cookies.username
+						li.list-group-item
+							b Password
+							a.pull-right&attributes({href:"#password","data-toggle":"modal", "data-target":"#passwordModal"}) Reset Now!
+				include ./template_view_loading.jade
+	+modal("avatarModal","Update Avatar")
+		.modal-body
+			form&attributes({onsubmit:"changeAvatar(); return false;",autocomplete:"off"})
+				.form-group.has-feedback
+					label Current Password
+					input.form-control#currentpassword_avatar(required)&attributes({name:"currentpassword_avatar",placeholder:"Current Password",type:"password", value:""})
+				.form-group.has-feedback
+					button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) Save
+	+modal("usernameModal","Change Email / Username")
+		.modal-body
+			form&attributes({onsubmit:"changeUsername(); return false;",autocomplete:"off"})
+				.form-group.has-feedback
+					label Username
+					input.form-control#username(required)&attributes({name:"username",placeholder:"Username",value:param_jade.cookies.username,type:"email"})
+				.form-group.has-feedback
+					label Current Password
+					input.form-control#currentpassword_username(required)&attributes({name:"currentpassword_username",placeholder:"Current Password",type:"password", value:""})
+				.form-group.has-feedback
+					button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) Save
+	+modal("passwordModal","Change Password")
+		.modal-body
+			form&attributes({onsubmit:"changePassword(); return false;",autocomplete:"off"})
+				.form-group.has-feedback
+					label New Password
+					input.form-control#password_new(required)&attributes({name:"password_new",placeholder:"New Password",value:"",type:"password",autocomplete:"new-password"})
+				.form-group.has-feedback
+					label Confirm New Password
+					input.form-control#password_new_confirm(required)&attributes({name:"password_new_confirm",placeholder:"Confirm New Password",value:"",type:"password",autocomplete:"new-password"})
+				.form-group.has-feedback
+					label Current Password
+					input.form-control#password_old(required)&attributes({name:"password_old",placeholder:"Current Password",type:"password", value:""})
+				.form-group.has-feedback
+					button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) Save

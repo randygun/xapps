@@ -1,0 +1,15 @@
+Buyer, 
+1. pencarian barang, cari "baju" ada hasilnya, tapi kalau "baju " (dengan spasi) ngak ada hasilnya. Ada keterangan, tidak bisa mengambil data.  --> DONE
+2. setelah pilih baju, pada saat masuk ke toko, baju yg di klik tadi sudah otomatis qty = 1, tanpa isi qty terlebih dahulu.  --> DONE
+3. Setelah Input barang yg di pesan, kemudian pindah ke troli dan pada troli kurangi Item, setelah itu klik kembali ke toko, pas mau nambah Item, di Input qty ke Item baru. Pas mau pilih menu troli lagi ngak bisa, pilih menu lain juga ngak bisa. Back juga ngak bisa. Terpaksa buka lagi apps. --> not replicable
+4. Buyer beli baju 3 pcs, beli rokok 2 pcs, pada saat update qty baju menjadi 20 pcs, tapi lupa di enter. Yang tampil di layar adalah baju 20 pcs dan rokok 2 pcs, dan perkalian baju jadi salah, bukan 20 pcs X harga, tapi 3 pcs, akibatnya total nilai nota juga salah.  --> DONE
+5. urutan tampilan pada pdf, biasanya urutan kolomnya adalah nama barang description, qty, harga satuan, baru jumlah (qty X harga satuan). Di urutan pdf sekarang : qty, harga satuan, nama barang, description, baru jumlah. --> DONE
+6. setelah order terkirim, troli kosong, dan begitu klik tombol belanja, bukannya pilih lokasi proyek, tapi langsung ke toko yg terpilih sebelumnya dan lokasi proyek sebelumnya. Seharusnya Reset dari awal lagi. --> DONE
+7. Pada pdf, tambahkan kata Ket : baru isi keterangan yg terinput. Sekarang ini keterangan di taruh di bawah alamat. --> DONE
+8. Pada saat Order di reject, notification ngak ada tulisan apapun. --> DONE
+9. Cari nama jalan, banyak yg ngak ada. Coba test cari jalan "Thamrin"  --> DONE
+10. Pada saat pertama kali mau cash it saldo, setelah pilih No rek yg ada, isi pin, pilih cash it, bukan langsung ke halaman pembayaran, malah ke halaman profil utk isi No rekening. --> DONE
+11. order yg sudah terkirim, tapi belum di close, sudah lebih dari 2 hari, ngak bisa close sendiri dengan rating 5 bintang. --> DONE
+12. pada menu saldo, banyak yg masuk pending walaupun transaksi sudah selesai. --> maksudnya halaman pending?
+13. distance km dari google didisplay di cart dan dicarry forward ke detail info invoice dan pdf --> DONE. Saat ini radius di set 1.5 KM. Rumus buat perhitungan jarak: (jarak-radius(karena 1.5 km pertama gratis)) --> pembulatan ke atas. Misal ketemunya 23.3 km, jadi 23.8 - 1.5 = 22.3 --> jadi 23 km.
+14. Cek kursor di setting pilih lokasi toko seller, mengapa tidak smooth --> Saat drag, marker digambar tiap detik nya, bisa diubah dengan cara bikin marker dummy yang selalu di tengah, butuh request asset baru ke Juan. takes time +- 1/2 hari untuk ubah ini aja.

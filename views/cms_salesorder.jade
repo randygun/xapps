@@ -1,0 +1,148 @@
+- var js_cms_fullhost = param_jade.protocol+"://"+param_jade.host+"/";
+- var total = 0;
+- var delivery_fee = 0;
+
+doctype html
+html
+	head
+		title= title
+		include ./template_include_base_header.jade
+		link(rel="stylesheet" media="all" href="#{js_cms_fullhost}css/cms_invoice.css")
+	body.hold-transition.invoice-page
+		div.wrapper
+			div.content
+				section.invoice
+					//- .watermark
+					//- 	p.tmtitle #{watermark}
+					div(style="z-index: 2;")
+						div.row
+							div.col-xs-6
+								img(src="#{param_jade.getFullPath()}/images/tmkop.png",style="float: left;")
+								div(style="display: inline")
+									| &nbsp;&nbsp;&nbsp; 
+									font(style="font-size: 19px;") 
+										b.tmtitle Tunjuk Material
+									br 
+									| &nbsp;&nbsp;&nbsp; Hunting #{support_phone}
+									br
+									| &nbsp;&nbsp;&nbsp; www.tunjukmaterial.com
+							div.col-xs-3 
+								strong(style="float: right;") SO Date
+								br
+								div(style="float: right;")= param[0].time_create_date
+							div.col-xs-3 
+								strong(style="float: right;") SO Number
+								br
+								div(style="float: right;")= param[0].generated_number
+						br
+						div.row.invoice-info(style="border-bottom: 3px solid #ccc;")
+							div.col-xs-6
+								b Dikirim Oleh
+								address
+									= param[0].store_name
+									br 
+									= param[0].store_address
+									br 
+									= param[0].store_phone
+							div.col-xs-6
+								b Kepada
+								address
+									| #{param[0].customer_name}
+									br 
+									| #{param[0].destination_name}
+									br 
+									| #{param[0].customer_phone}
+						br
+						div.row.invoice-info(style="border-bottom: 3px solid #ccc;")
+							- var classRow = 'col-xs-12';
+							if watermark !== ''
+								- classRow = 'col-xs-6';
+							div(class="#{classRow}")
+								b Note
+								address
+									| Penerima: #{param[0].recipient_name}
+									br 
+									| Keterangan Alamat : #{param[0].destination_remark}
+									br 
+									| Telp Penerima: #{param[0].recipient_phone}
+									br 
+									| Waktu Pengiriman: #{param[0].recipient_remark}
+							if watermark !== ''
+								div.col-xs-6
+									b Status Pemesanan
+									br
+									if watermark === 'LUNAS'
+										b
+											i
+												font.tmtitlegreen(size="12")= watermark
+									else
+										b
+											i
+												font.tmtitle(size="12")= watermark
+						br
+						div.row.invoice-info(style="border-bottom: 3px solid #ccc;")
+							div.col-xs-12
+								address
+									strong
+										| Jarak : #{param[0].distance} meters
+								address
+									strong
+										| Dikirim Tanggal : #{param[0].time_deliver_plan}
+						br
+						strong Rincian Tagihan Anda
+						br
+						div.row
+							div.col-xs-12.table-responsive
+								table.table.table-striped
+									thead
+										tr
+											th Produk
+											th Keterangan
+											th Qty
+											th Harga / Unit
+											th Jumlah
+									tbody
+										for product in param
+											tr 
+												td= product.product_name
+												td= product.product_description
+												td= product.qty
+												td #{parseInt(product.product_price).formatMoney(0)}
+												td #{parseInt(product.qty*product.product_price).formatMoney(0)}
+												- total += parseInt(product.qty*product.product_price);
+												- delivery_fee = parseInt(product.fee_delivery);
+									tfoot
+										tr(style="border-top: 3px solid #ccc;")
+											td
+											td
+											td
+											td Jumlah
+											td #{total.formatMoney(0)}
+										tr
+											td
+											td
+											td
+											td Biaya Kirim
+											td #{delivery_fee.formatMoney(0)}
+										tr(style="border-top: 3px solid #ccc;")
+											td
+											td
+											td
+											td 
+												strong Total
+											td 
+												strong #{(total+delivery_fee).formatMoney(0)}
+						br
+						br
+						div.row
+							div.col-xs-12
+								strong Info Penting Pelanggan
+						div.row
+							div.col-xs-1 &nbsp;&nbsp;
+							div.col-xs-11
+								| 1. Mohon diperiksa kembali kualitas material yang diterima <br>
+								| 2. Barang yang sudah diterima, tidak dapat dikembalikan
+						br
+						div.row
+							div.col-xs-12 Terima kasih telah menggunakan layanan kami. Cara berbelanja material baru dan praktis.
+		include ./template_include_base_script.jade

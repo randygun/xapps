@@ -1,0 +1,33 @@
+header.main-header
+	a.logo(href="#{js_cms_fullhost}home") 
+		span.logo-lg 
+			b= param_jade.applicationFirst.toUpperCase()
+			| #{param_jade.applicationSecond.toLowerCase()}
+	nav.navbar.navbar-static-top(role="navigation")
+		a.sidebar-toggle(data-toggle="offcanvas" role="button" href="#")
+			span.sr-only Toggle Navigation
+		.navbar-custom-menu
+			ul.nav.navbar-nav
+				li.dropdown.notifications-menu#badgereadydisplay&attributes({style:"display:none;"})
+					a.dropdown-toggle&attributes({href:"#"})
+						button.btn-xs.btn-primary ON &nbsp;&nbsp;&nbsp;
+							span.badge#badgeready 0
+				li.dropdown.notifications-menu#badgestoppeddisplay&attributes({style:"display:none;"})
+					a.dropdown-toggle&attributes({href:"#"})
+						button.btn-xs.btn-danger OFF &nbsp;&nbsp;&nbsp;
+							span.badge#badgestopped 0			
+				li.dropdown.user.user-menu
+					a.dropdown-toggle(href="#" data-toggle="dropdown")
+						img.user-image&attributes({src:param_jade.cookies.avatar, alt:"User Image"})
+						span.hidden-xs= param_jade.cookies.username
+					ul.dropdown-menu
+						li.user-header
+							img.img-circle&attributes({src:param_jade.cookies.avatar, alt:"User Image"})
+							p= param_jade.cookies.username 
+								br 
+								= param_jade.cookies.description_role
+						li.user-footer
+							.pull-left
+								a.btn.btn-default.btn-flat(href="#{js_cms_fullhost}profile") Profile
+							.pull-right
+								a.btn.btn-default.btn-flat(href="#{js_cms_fullhost}logout") Sign Out

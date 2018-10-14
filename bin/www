@@ -1,0 +1,177 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+//INTEGRATION
+var cluster = require('cluster');
+var init;
+
+if(cluster.isMaster){
+  var tools_event = require(__dirname+"/../tools/tools_event");
+  var config = require(__dirname+"/../config");
+  tools_event.setSetting(function(){
+    var cpuCount = require('os').cpus().length;
+    var workers = [];
+
+    var standbyMessage = function(worker){
+      worker.on('message', function(msg) {
+        console.log('Master ' + process.pid + ' received message from worker ' + this.id + '.', msg);
+        workers.forEach(function(worker){
+          worker.send(msg);
+        });
+      });
+    };
+
+    for (var i = 0; i < cpuCount; i += 1) {
+      var worker = cluster.fork();
+      workers.push(worker);
+      standbyMessage(worker);
+    }
+    cluster.on('online', function(worker) {
+      console.log('Worker ' + worker.process.pid + ' is online');
+      worker.send({ init: init});
+    });
+    cluster.on('exit', function (worker) {
+      console.log('Worker %d died :(. Respawn', worker.id);
+      workers = workers.filter(function(thisworker){
+        return parseInt(thisworker.id)!==parseInt(worker.id);
+      });  
+      var newworker = cluster.fork();
+      workers.push(newworker);
+      var worker_special = JSON.parse(config.setting.worker_special);
+      config.cluster.worker = newworker;
+      if(worker_special.indexOf(parseInt(worker.id))!==-1){
+        config.cluster.worker.special = true;
+        var proc_special = require(__dirname+"/../proc/proc_special");
+      }
+    });
+  });
+  init = require(__dirname+"/../tools/tools_init");
+}else{
+//INTEGRATION
+  var app = require('../app');
+  var debug = require('debug')('xapps:server');
+  var http = require('http');
+
+  //INTEGRATION
+  var config = require(__dirname+"/../config");
+  var tools_email = require(__dirname+"/../tools/tools_email");
+  config.setCluster(cluster);
+  //INTEGRATION
+
+  /**
+   * Get port from environment and store in Express.
+   */
+
+  var port = 3000;
+  app.set('port', port);
+
+  /**
+   * Create HTTP server.
+   */
+
+  var server = http.createServer(app);
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+
+  //INTEGRATION
+  process.on('message', function(msg) {
+    // we only want to intercept messages that have a chat property
+    console.log('Incoming message from master');
+    if (msg.init) {
+      console.log("INCOMING "+JSON.stringify(msg.init));
+      config.setDynamic(msg.init.dynamic);
+      var NodeRSA = require('node-rsa');
+      config.RSA.key = new NodeRSA(msg.init.privateRSA);
+      config.setting = msg.init.setting;
+      console.log('Worker '+cluster.worker.id);
+      var worker_special = JSON.parse(config.setting.worker_special);
+      if(worker_special.indexOf(parseInt(config.cluster.worker.id))===-1){
+        config.cluster.worker.special = false;
+        //RUN SERVER PORT
+        server.listen(port);
+        var proc_concurrent = require(__dirname+'/../proc/proc_concurrent');
+      }else{
+        config.cluster.worker.special = true;
+        var proc_special = require(__dirname+"/../proc/proc_special");
+      }
+    }else if(msg.module && config.cluster.worker.special){
+      console.log('Incoming message has module');
+      if(msg.module==='email'){
+        console.log('Incoming message has an email module');
+        tools_email.workersend(msg.object.to,msg.object.subject,msg.object.template,msg.object.param);
+      }
+    }
+  });
+  //INTEGRATION
+  server.on('error', onError);
+  server.on('listening', onListening);
+
+  /**
+   * Normalize a port into a number, string, or false.
+   */
+
+  function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+      // named pipe
+      return val;
+    }
+
+    if (port >= 0) {
+      // port number
+      return port;
+    }
+
+    return false;
+  }
+
+  /**
+   * Event listener for HTTP server "error" event.
+   */
+
+  function onError(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        console.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  }
+
+  /**
+   * Event listener for HTTP server "listening" event.
+   */
+
+  function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+  }
+//INTEGRATION
+}
+//INTEGRATION
+
+

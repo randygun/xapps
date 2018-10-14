@@ -1,0 +1,177 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_order.js")
+
+block breadcrumb
+	button.btn.btn-success.btn-flat.btn.block&attributes({href:"#",onclick:"filterDate();"})
+		i.fa.fa-filter
+		| &nbsp;&nbsp;&nbsp; Filter Date
+	| &nbsp;&nbsp;&nbsp;
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"generateReport();"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Generate Report
+
+block content
+	script
+		| var fromDate = '#{param.fromDate}';
+		| var toDate = '#{param.toDate}';
+	+modal("modalFilter","Filter Date")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmSaveFilter(); return false;"})
+						.form-group.has-feedback
+							label From Date
+							br
+							input.form-control#fromDate(placeholder="From Date",type="date",value="2017-01-01")
+							br
+							label To Date
+							br
+							input.form-control#toDate(placeholder="To Date",type="date")
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	.nav-tabs-custom
+		ul.nav.nav-tabs
+			li.active
+				a(href='#tab_1', data-toggle='tab') Outstanding
+			li
+				a(href='#tab_2', data-toggle='tab') Rejected
+			li
+				a(href='#tab_3', data-toggle='tab') Confirmation
+			li
+				a(href='#tab_4', data-toggle='tab') Delivery Pending
+			li
+				a(href='#tab_5', data-toggle='tab') Complete
+			li
+				a(href='#tab_6', data-toggle='tab') Open Complaint
+			li
+				a(href='#tab_7', data-toggle='tab') Close Complaint
+			li
+				a(href='#tab_8', data-toggle='tab') Non Complaint
+		.tab-content
+			.tab-pane.active#tab_1
+				table.display#listOutstanding&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT
+							th TOTAL
+							th ACTION
+				br
+				center
+					- var id = 'tab1';
+					include ./template_view_loading.jade
+			.tab-pane#tab_2
+				table.display#listRejected&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT
+							th TOTAL
+							th REJECT INFORMATION
+							th ACTION
+				br
+				center
+					- var id = 'tab2';
+					include ./template_view_loading.jade
+			.tab-pane#tab_3
+				table.display#listConfirmation&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT<br>/ AGREED
+							th TOTAL<br>/ AGREED
+							th IS REJECT
+							th ACTION
+				br
+				center
+					- var id = 'tab3';
+					include ./template_view_loading.jade
+			.tab-pane#tab_4
+				table.display#listDeliveryPending&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT<br>/ AGREED
+							th TOTAL<br>/ AGREED
+							th ACTION
+				br
+				center
+					- var id = 'tab4';
+					include ./template_view_loading.jade
+			.tab-pane#tab_5
+				table.display#listComplete&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT<br>/ AGREED
+							th TOTAL<br>/ AGREED
+							th IS CLOSE
+							th ACTION
+				br
+				center
+					- var id = 'tab5';
+					include ./template_view_loading.jade
+			.tab-pane#tab_6
+				table.display#listOpenComplaint&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT<br>/ AGREED
+							th TOTAL<br>/ AGREED
+							th IS CLOSE
+							th ACTION
+				br
+				center
+					- var id = 'tab6';
+					include ./template_view_loading.jade
+			.tab-pane#tab_7
+				table.display#listCompleteComplaint&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT<br>/ AGREED
+							th TOTAL<br>/ AGREED
+							th IS CLOSE
+							th ACTION
+				br
+				center
+					- var id = 'tab7';
+					include ./template_view_loading.jade
+			.tab-pane#tab_8
+				table.display#listNonComplaint&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE NAME
+							th CUSTOMER NAME
+							th STORE ADDRESS<br>DELIVERY DESTINATION
+							th PRODUCT<br>/ AGREED
+							th TOTAL<br>/ AGREED
+							th IS CLOSE
+							th ACTION
+				br
+				center
+					- var id = 'tab8';
+					include ./template_view_loading.jade

@@ -1,0 +1,60 @@
+extends template_layout_app
+block css
+	link(rel="stylesheet",href="#{js_cms_fullhost}css/ads.css")
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_ads.js")
+
+block content
+	+modal("modalDelete","Delete Ads")
+		.modal-body
+			h3 Are you sure to delete this ads?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmDeleteAds();"}) DELETE
+	+modal("modalAdd","Add Ads")
+		.modal-body
+			.row
+				.col-xs-12
+					label Image File
+					input#adsImage&attributes({type:"file",name:"adsImage", accept:"image/*"})
+			br
+			.row
+				.col-xs-12
+					.progress&attributes({style:"display: none;"})
+						.progress-bar
+			.row
+				.col-xs-12
+					label Name
+					input#nameAds&attributes({type:"text",name:"nameAds",placeholder:'Ads Name',style:'width:100%;'})
+			.row
+				.col-xs-12
+					label ADS
+					input#siteUrl&attributes({type:"text",name:"siteUrl",placeholder:'Site URL. Example http://tunjukmaterial.com/',style:'width:100%;'})
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmAddAds();"}) ADD
+	+modal("modalEdit","Edit Ads")
+		.modal-body
+			.row
+				.col-xs-12
+					label Image File
+					input#adsImageEdit&attributes({type:"file",name:"adsImageEdit", accept:"image/*"})
+			br
+			.row
+				.col-xs-12
+					.progress&attributes({style:"display: none;"})
+						.progress-bar
+			.row
+				.col-xs-12
+					label Name
+					input#nameAdsEdit&attributes({type:"text",name:"nameAdsEdit",placeholder:'Ads Name',style:'width:100%;'})
+			.row
+				.col-xs-12
+					label ADS
+					input#siteUrlEdit&attributes({type:"text",name:"siteUrlEdit",placeholder:'Site URL. Example http://tunjukmaterial.com/',style:'width:100%;'})
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmEditAds();"}) EDIT
+	#adscontainer
+
+	.row
+		.col-xs-12
+			button.btn.btn-block.btn-primary(type="button",onclick="addRow();") ADD ROW

@@ -1,0 +1,18 @@
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.watermark {
+  color: #D9423E;
+  opacity: 0.3;
+  font-size: 100pt;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  height: 100%;
+  margin: 200px 0px 0px 200px;
+}
+

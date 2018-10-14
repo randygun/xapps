@@ -1,0 +1,220 @@
+li.header Administrator Menu
+
+- var home = {};
+- var ads = {};
+- var store = {};
+- var customer = {};
+- var order = {};
+- var payment = {};
+- var appsetting = {};
+- var managementusers = {};
+- var report = {};
+- var reportgeneric = {};
+- var reportcategory = {};
+- var pushnotification = {};
+- var email = {};
+- var emailorderbuyer = {};
+- var emailorderseller = {};
+- var emailforgetpassword = {};
+- var emailreject = {};
+- var emailcompletebuyer = {};
+- var emailcompleteseller = {};
+- var emailpasswordchange = {};
+- var emailpinchange = {};
+- var emailregisterbuyer = {};
+- var emailregisterseller = {};
+- var emailsellerpaid = {};
+- var emailusernamechange = {};
+- var emailagreebuyer = {};
+- var emailagreeseller = {};
+- var emaildeliverbuyer = {};
+- var emaildeliverseller = {};
+- var emailpaidbuyer = {};
+- var emailpaidseller = {};
+- var installment = {};
+
+if param_jade.url.indexOf("/home") === 0
+	- home.class = "active"
+
+if param_jade.url.indexOf("/store") === 0
+	- store.class = "active"
+
+if param_jade.url.indexOf("/ads") === 0
+	- ads.class = "active"
+
+if param_jade.url.indexOf("/customer") === 0
+	- customer.class = "active"
+
+if param_jade.url.indexOf("/order") === 0
+	- order.class = "active"
+
+if param_jade.url.indexOf("/payment") === 0
+	- payment.class = "active"
+
+if param_jade.url.indexOf("/appsetting") === 0
+	- appsetting.class = "active"
+
+if param_jade.url.indexOf("/management/users") === 0
+	- managementusers.class = "active"
+
+if param_jade.url.indexOf("/pushnotification") === 0
+	- pushnotification.class = "active"
+
+if param_jade.url.indexOf("/email") === 0
+	- email.class = "active"
+
+if param_jade.url.indexOf("/email/order/buyer") === 0
+	- emailorderbuyer.class = "active"
+
+if param_jade.url.indexOf("/email/order/seller") === 0
+	- emailorderseller.class = "active"
+
+if param_jade.url.indexOf("/email/agree/buyer") === 0
+	- emailagreebuyer.class = "active"
+
+if param_jade.url.indexOf("/email/agree/seller") === 0
+	- emailagreeseller.class = "active"
+
+if param_jade.url.indexOf("/email/order/reject") === 0
+	- emailreject.class = "active"
+
+if param_jade.url.indexOf("/email/complete/buyer") === 0
+	- emailcompletebuyer.class = "active"
+
+if param_jade.url.indexOf("/email/complete/seller") === 0
+	- emailcompleteseller.class = "active"
+
+if param_jade.url.indexOf("/email/forgetpassword") === 0
+	- emailforgetpassword.class = "active"
+
+if param_jade.url.indexOf("/email/passwordchange") === 0
+	- emailpasswordchange.class = "active"
+
+if param_jade.url.indexOf("/email/pinchange") === 0
+	- emailpinchange.class = "active"
+
+if param_jade.url.indexOf("/email/usernamechange") === 0
+	- emailusernamechange.class = "active"
+
+if param_jade.url.indexOf("/email/register/buyer") === 0
+	- emailregisterbuyer.class = "active"
+
+if param_jade.url.indexOf("/email/register/seller") === 0
+	- emailregisterseller.class = "active"
+
+if param_jade.url.indexOf("/email/deliver/buyer") === 0
+	- emaildeliverbuyer.class = "active"
+
+if param_jade.url.indexOf("/email/deliver/seller") === 0
+	- emaildeliverseller.class = "active"
+
+if param_jade.url.indexOf("/email/paid/buyer") === 0
+	- emailpaidbuyer.class = "active"
+
+if param_jade.url.indexOf("/email/paid/seller") === 0
+	- emailpaidseller.class = "active"
+
+
+if param_jade.url.indexOf("/email/sellerpaid") === 0
+	- emailsellerpaid.class = "active"
+if param_jade.url.indexOf("/installment") === 0
+	- installment.class = "active"
+
+if param_jade.url.indexOf("/reports") === 0
+	- report.class = "active"
+	if param_jade.url.indexOf("/reports/category") === 0
+		- reportcategory.class = "active"
+	else
+		- reportgeneric.class = "active"
+
+li&attributes(home)
+	a(href="#{js_cms_fullhost}home")
+		span Dashboard
+
+li&attributes(ads)
+	a(href="#{js_cms_fullhost}ads")
+		span Ads
+
+li&attributes(store)
+	a(href="#{js_cms_fullhost}store")
+		span Store
+
+li&attributes(customer)
+	a(href="#{js_cms_fullhost}customer")
+		span Customer
+
+li&attributes(order)
+	a(href="#{js_cms_fullhost}order")
+		span Order
+
+li&attributes(payment)
+	a(href="#{js_cms_fullhost}payment")
+		span Payment
+
+li&attributes(managementusers)
+	a(href="#{js_cms_fullhost}management/users")
+		span User Management
+
+li.treeview&attributes(report)
+	a(href="#")
+		span Report
+		i.fa.fa-angle-left.pull-right
+	ul.treeview-menu
+		li&attributes(reportgeneric)
+			a(href="#{js_cms_fullhost}reports") General Report
+		li&attributes(reportcategory)
+			a(href="#{js_cms_fullhost}reports/category") Category Report
+
+li&attributes(pushnotification)
+	a(href="#{js_cms_fullhost}pushnotification")
+		span Push Notification
+
+li.treeview&attributes(email)
+	a(href="#")
+		span Email Template
+		i.fa.fa-angle-left.pull-right
+	ul.treeview-menu
+		li&attributes(emailregisterbuyer)
+			a(href="#{js_cms_fullhost}email/register/buyer") Registrasi Buyer
+		li&attributes(emailregisterseller)
+			a(href="#{js_cms_fullhost}email/register/seller") Registrasi Seller
+		li&attributes(emailpasswordchange)
+			a(href="#{js_cms_fullhost}email/passwordchange") Ganti Password
+		li&attributes(emailpinchange)
+			a(href="#{js_cms_fullhost}email/pinchange") Ganti PIN
+		li&attributes(emailusernamechange)
+			a(href="#{js_cms_fullhost}email/usernamechange") Ganti Username
+		li&attributes(emailforgetpassword)
+			a(href="#{js_cms_fullhost}email/forgetpassword") Lupa Password
+		li&attributes(emailorderbuyer)
+			a(href="#{js_cms_fullhost}email/order/buyer") Pesanan Barang Buyer
+		li&attributes(emailorderseller)
+			a(href="#{js_cms_fullhost}email/order/seller") Pesanan Barang Seller
+		li&attributes(emailreject)
+			a(href="#{js_cms_fullhost}email/order/reject") Pesanan Dibatalkan
+		li&attributes(emailagreebuyer)
+			a(href="#{js_cms_fullhost}email/agree/buyer") Pesanan Dikonfirmasi Buyer
+		li&attributes(emailagreeseller)
+			a(href="#{js_cms_fullhost}email/agree/seller") Pesanan Dikonfirmasi Seller
+		li&attributes(emaildeliverbuyer)
+			a(href="#{js_cms_fullhost}email/deliver/buyer") Pesanan Dikirim Buyer
+		li&attributes(emaildeliverseller)
+			a(href="#{js_cms_fullhost}email/deliver/seller") Pesanan Dikirim Seller
+		li&attributes(emailpaidbuyer)
+			a(href="#{js_cms_fullhost}email/paid/buyer") Pesanan Dibayar Buyer
+		li&attributes(emailpaidseller)
+			a(href="#{js_cms_fullhost}email/paid/seller") Pesanan Dibayar Seller
+		li&attributes(emailcompletebuyer)
+			a(href="#{js_cms_fullhost}email/complete/buyer") Pesanan Lengkap Buyer
+		li&attributes(emailcompleteseller)
+			a(href="#{js_cms_fullhost}email/complete/seller") Pesanan Lengkap Seller
+		li&attributes(emailsellerpaid)
+			a(href="#{js_cms_fullhost}email/sellerpaid") Seller Dibayar
+
+li&attributes(installment)
+	a(href="#{js_cms_fullhost}installment")
+		span Installment
+li&attributes(appsetting)
+	a(href="#{js_cms_fullhost}appsetting")
+		span App Setting
+

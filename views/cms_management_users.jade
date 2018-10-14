@@ -1,0 +1,69 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_management_users.js")
+
+block breadcrumb
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"addNewUser();"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Add New User
+		
+block content
+	input#fakeavatar&attributes({style:"display: none;",type:"file",name:"fakeavatar"})
+	.box.box-success
+		.box-header.with-border
+			table.display#managementUsers&attributes({cellspacing:0,width:"100%"})
+				thead
+					tr
+						th No
+						th Username
+						th Role Code
+						th Role Description
+						th Time Create
+						th Time Update
+						th Is Active
+						th Action
+		include ./template_view_loading.jade
+	+modal("modalUser","-")
+		.modal-body
+			.row
+				.col-xs-12.col-centered
+					.box.box-primary
+						.box-body.box-profile
+							center
+								.ih-item.circle.effect19
+									a&attributes({href:"#",onclick:"avatarButton();"})
+										.img
+											img.profile-user-img.img-responsive.img-circle#avatar&attributes({alt:"User profile picture",src:''})
+										.info
+											h3 Change Avatar
+											p Click to change avatar
+							br
+							.progress&attributes({style:"display: none;"})
+								.progress-bar
+							form&attributes({onsubmit:"confirmSaveData(); return false;"})
+								.form-group.has-feedback
+									label Username
+									br
+									input.form-control#username("required")&attributes({name:"username",placeholder:"Username",type:"email",autocomplete:"new-password"})
+									br
+									label Password
+									input.form-control#password("required")&attributes({name:"password",placeholder:"Password",type:"password",autocomplete:"new-password"})
+									br
+									label Is Active
+									select.form-control#is_active("required")&attributes({name:"is_active"})
+										option&attributes({value:"true"}) TRUE
+										option&attributes({value:"false"}) FALSE
+								button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+						- id = 'modalSave';
+						include ./template_view_loading.jade
+	+modal("modalDelete","De-Activate User")
+		.modal-body
+			h3 Are you sure to de-activate this user?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmDeleteData();"}) OK
+	+modal("modalActivate","Activate User")
+		.modal-body
+			h3 Are you sure to activate this user?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmActivateData();"}) OK

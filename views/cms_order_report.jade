@@ -1,0 +1,197 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_order_report.js")
+
+block content
+	script 
+		| var id_order= #{param.id};
+		| var commission = #{param.commission};
+	.nav-tabs-custom
+		ul.nav.nav-tabs
+			li.active
+				a(href='#tab_1', data-toggle='tab') Request
+			if param.id_agree !== null
+				li
+					a(href='#tab_2', data-toggle='tab') Confirmed
+			li
+				a(href='#tab_3', data-toggle='tab') Complain
+		.tab-content
+			.tab-pane.active#tab_1
+				.row
+					.col-xs-12
+						h5#commissionPI
+				.row
+					.col-xs-12
+						h3 PERFORMA INVOICE
+				h4 #{param.generated_number}, #{param.time_create}
+				br
+				.row
+					.col-xs-6 
+						strong Customer
+						| <br>Name: #{param.customer.name}<br>Address: #{param.customer.address}<br>Phone: #{param.customer.phone}<br>Remark: #{param.customer.remark}
+					.col-xs-6 
+						strong Seller
+						| <br>Name: #{param.store.name}<br>Address: #{param.store.address}<br>Phone: #{param.store.phone}<br>Review: #{param.store.review} stars<br>Remark: #{param.store.remark}
+				.row
+					.col-xs-12
+						table.display.dataTable#listOutstanding&attributes({cellspacing:0,width:"100%"})
+							thead
+								tr
+									th PRODUCT
+									th UNIT
+									th
+										div(align="right") QTY
+									th
+										div(align="right") PRICE
+									th
+										div(align="right") AMOUNT
+							tbody
+								- var i = 0;
+								- var cs = 'odd';
+								- var subtotal = 0;
+								for detail in param.details
+									if i%2 == 0 
+										- cs = 'odd';
+									else
+										- cs = 'even';
+									tr(class = "#{cs}")
+										td= detail.name
+										td= detail.unit
+										td(align="right")= parseInt(detail.qty).formatMoney(0)
+										td(align="right")= parseInt(detail.price).formatMoney(0)
+										td(align="right")= parseInt(detail.qty*detail.price).formatMoney(0)
+										- subtotal += parseInt(detail.qty*detail.price);
+									- i++;
+								tr.even
+									td
+									td
+									td
+									td Sub Total
+									td(align="right")= parseInt(subtotal).formatMoney(0)
+								tr.even
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;") Ongkir
+									td(align="right" style="border-top: 0pt white;")= parseInt(param.fee_delivery).formatMoney(0)
+								tr.even
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;") Total
+									td(align="right" style="border-top: 0pt white;")= parseInt(subtotal+parseInt(param.fee_delivery)).formatMoney(0)
+			script
+				| var commissionPI = #{parseInt(subtotal)+parseInt(param.fee_delivery)};
+			.tab-pane#tab_2
+				.row
+					.col-xs-12
+						h5#commissionCI
+				.row
+					.col-xs-12
+						h3 CONFIRMED INVOICE
+				h4
+					a(href="#{js_cms_fullhost}salesorder/SalesOrder#{param.id}.pdf", target="_blank") #{param.generated_number}, #{param.time_create}
+				br
+				.row
+					.col-xs-6 
+						strong Customer
+						| <br>Name: #{param.customer.name}<br>Address: #{param.customer.address}<br>Phone: #{param.customer.phone}<br>Remark: #{param.customer.remark}
+					.col-xs-6 
+						strong Seller
+						| <br>Name: #{param.store.name}<br>Address: #{param.store.address}<br>Phone: #{param.store.phone}<br>Review: #{param.store.review} stars<br>Remark: #{param.store.remark}
+				.row
+					.col-xs-12
+						table.display.dataTable#listOutstanding&attributes({cellspacing:0,width:"100%"})
+							thead
+								tr
+									th PRODUCT
+									th UNIT
+									th
+										div(align="right") QTY
+									th
+										div(align="right") QTY AGREE
+									th
+										div(align="right") PRICE
+									th
+										div(align="right") AMOUNT
+							tbody
+								- var i = 0;
+								- var cs = 'odd';
+								- var subtotal = 0;
+								for detail in param.details
+									if i%2 == 0 
+										- cs = 'odd';
+									else
+										- cs = 'even';
+									tr(class = "#{cs}")
+										td= detail.name
+										td= detail.unit
+										td(align="right")= parseInt(detail.qty).formatMoney(0)
+										td(align="right")= parseInt(detail.qty_agree).formatMoney(0)
+										td(align="right")= parseInt(detail.price).formatMoney(0)
+										td(align="right")= parseInt(detail.qty_agree*detail.price).formatMoney(0)
+										- subtotal += parseInt(detail.qty_agree*detail.price);
+									- i++;
+								tr.even
+									td
+									td
+									td
+									td
+									td Sub Total
+									td(align="right")= parseInt(subtotal).formatMoney(0)
+								tr.even
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;") Ongkir
+									td(align="right" style="border-top: 0pt white;")= parseInt(param.fee_delivery).formatMoney(0)
+								tr.even
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;")
+									td(style="border-top: 0pt white;") Total
+									td(align="right" style="border-top: 0pt white;")= parseInt(subtotal+parseInt(param.fee_delivery)).formatMoney(0)
+			script
+				| var commissionCI = #{parseInt(subtotal)+parseInt(param.fee_delivery)};
+			.tab-pane#tab_3
+				h3 COMPLAIN
+				.row
+					.col-xs-12
+						textarea#description(rows="10",style="width:100%;",placeholder="Describe the complain here!")= param.complain.description
+						label Input attachments
+						input#fileAttachment&attributes({type:"file",name:"fileAttachment"})
+						.progress&attributes({style:"display: none;"})
+							.progress-bar
+						div#attachments
+							for attachment in param.complain.attachments
+								- var e = new Buffer(attachment).toString('base64').replace(/=/g,'');
+								div(id="att#{e}")
+									a(href="#{attachment}",target="blank")= attachment
+									| &nbsp;&nbsp;&nbsp;(
+									a(href="#remove", onclick="remove('#{e}');") Remove
+									| )
+						br
+				.row
+					.col-xs-12
+						button.btn.btn-primary.btn-block.btn-flat(onclick="saveDraft();") SAVE AS DRAFT
+				br
+				.row
+					.col-xs-6
+						button.btn.btn-danger.btn-block.btn-flat(onclick="finish(false);") FINISH, NO REFUND
+					.col-xs-6
+						button.btn.btn-success.btn-block.btn-flat(onclick="finish(true);") FINISH, REFUND
+				br
+				h2 List of Complaints
+				.row
+					.col-xs-12
+						table.display.dataTable#listComplaints&attributes({cellspacing:0,width:"100%"})
+							thead
+								tr
+									th No
+									th Description
+									th Attachments
+									th Is Refund
+									th Time Create

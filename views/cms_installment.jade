@@ -1,0 +1,56 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_installment.js")
+
+block breadcrumb
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"addNewBank();"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Add New Bank
+
+block content
+	input#fakeavatar&attributes({style:"display: none;",type:"file",name:"fakeavatar"})
+	.box.box-success
+		.box-header.with-border
+			table.display#installments&attributes({cellspacing:0,width:"100%"})
+				thead
+					tr
+						th No
+						th Bank Name
+						th Bank Code
+						th Terms (Months)
+						th Is Active
+						th Time Update
+						th Time Create
+						th Action
+		include ./template_view_loading.jade
+	+modal("modalInstallment","-")
+		.modal-body
+			.row
+				.col-xs-12.col-centered
+					.box.box-primary
+						.box-body.box-profile
+							form&attributes({onsubmit:"confirmSaveData(); return false;"})
+								.form-group.has-feedback
+									label Bank Name
+									br
+									input.form-control#name("required")&attributes({name:"name",placeholder:"Name",type:"text",autocomplete:"new-password"})
+									br
+									label Bank Code
+									input.form-control#code("required")&attributes({name:"code",placeholder:"Code",type:"text",autocomplete:"new-password"})
+									br
+									label Installment Terms (Months)
+									input.form-control#terms("required")&attributes({name:"terms",placeholder:"Terms. e.g: 3,6,12,24",type:"text",autocomplete:"new-password"})
+									br
+									label Is Active
+									select.form-control#is_active("required")&attributes({name:"is_active"})
+										option&attributes({value:"true"}) TRUE
+										option&attributes({value:"false"}) FALSE
+								button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+						- id = 'modalSave';
+						include ./template_view_loading.jade
+	+modal("modalDelete","De-Activate Bank Installment")
+		.modal-body
+			h3 Are you sure to delete this bank?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmDeleteData();"}) OK

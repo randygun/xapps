@@ -1,0 +1,30 @@
+- var js_cms_fullhost = param_jade.protocol+"://"+param_jade.host+"/";
+
+mixin modal(id, title)
+	.modal.fade&attributes({id: id, tabindex: "-1", role: "dialog", "aria-labelledby": id+"Label"})
+		.modal-dialog(role="document")
+			.modal-content
+				.modal-header
+					button.close&attributes({type:"button", "data-dismiss":"modal", "aria-label":"Close"})
+						span(aria-hidden="true") &times;
+					h4.modal-title&attributes({id:id+"Title"})= title
+				if block
+					block
+
+doctype html
+html
+	head
+		title= title
+		include ./template_include_base_header.jade
+		script
+			| var token_access = "#{param_jade.cookies.token_access}";
+			| var token_session = "#{param_jade.cookies.token_session}";
+		block startscript
+body.fixed.skin-green
+	.wrapper
+		include ./template_include_cms_navigation.jade
+		include ./template_include_cms_sidebar.jade
+		include ./template_include_cms_content.jade
+		include ./template_include_cms_footer.jade
+	include ./template_include_base_script.jade
+	include ./template_include_cms_script.jade

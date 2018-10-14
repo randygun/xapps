@@ -1,0 +1,17 @@
+.modal.fade(id="#{modal.id}" tabindex="-1" role="dialog" aria-labelledby="#{modal.id}Label")
+	.modal-dialog(role="document")
+		.modal-content
+			.modal-header
+				button.close(type="button" data-dismiss="modal" aria-label="Close")
+					span(aria-hidden="true") &times;
+				h4.modal-title(id="#{modal.id}Label") #{modal.title}
+			.modal-body
+			| !{modal.body}
+			.modal-footer
+				case modal.close
+					when true
+						button.btn.btn-default(type="button" data-dismiss="modal") Close
+				if modal.ok
+					button.btn.btn-primary(type="button")&attributes(modal.ok) OK
+				if modal.okcustom
+					| !{modal.okcustom}							

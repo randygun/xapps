@@ -1,0 +1,41 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_customer_main.js")
+
+block content
+	.nav-tabs-custom
+		ul.nav.nav-tabs
+			li.active
+				a(href='#tab_1', data-toggle='tab') Customer
+			li
+				a(href='#tab_2', data-toggle='tab') Blacklist
+		.tab-content
+			.tab-pane.active#tab_1
+				table.display#listCustomer&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th NAME
+							th ADDRESS
+							th JOIN DATE
+							th TOTAL TRANSACTION
+							th ACTION
+				br
+				center
+					- var id = 'tab1';
+					include ./template_view_loading.jade
+			.tab-pane#tab_2
+				table.display#listCustomerBlocked&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th NAME
+							th ADDRESS
+							th JOIN DATE
+							th TOTAL TRANSACTION
+							th ACTION
+				br
+				center
+					- var id = 'tab2';
+					include ./template_view_loading.jade

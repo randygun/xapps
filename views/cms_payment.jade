@@ -1,0 +1,123 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_payment.js")
+
+block breadcrumb
+	button.btn.btn-success.btn-flat.btn.block&attributes({href:"#",onclick:"filterDate();"})
+		i.fa.fa-filter
+		| &nbsp;&nbsp;&nbsp; Filter Date
+	| &nbsp;&nbsp;&nbsp;
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"generateReportPaymentSeller();"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Report Payment Seller
+	| &nbsp;&nbsp;&nbsp;
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"generateReportPaymentBuyer();"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Report Cash It Buyer
+
+block content
+	script
+		| var fromDate = '#{param.fromDate}';
+		| var toDate = '#{param.toDate}';
+	+modal("modalFilter","Filter Date")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmSaveFilter(); return false;"})
+						.form-group.has-feedback
+							label From Date
+							br
+							input.form-control#fromDate(placeholder="From Date",type="date",value="2017-01-01")
+							br
+							label To Date
+							br
+							input.form-control#toDate(placeholder="To Date",type="date")
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	+modal("modalNextSeller","Pay Seller")
+		.modal-body
+			h3 Are you sure want to pay this transaction?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmNoPaySeller();"}) NO
+			| &nbsp;&nbsp;&nbsp;
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmPaySeller();"}) YES
+	+modal("modalNextBuyer","Delete Category")
+		.modal-body
+			h3 Are you sure want to pay this transaction?
+		.modal-footer
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmNoPayBuyer();"}) NO
+			| &nbsp;&nbsp;&nbsp;
+			button.btn.btn-primary.btn-block.btn-flat&attributes({onclick:"confirmPayBuyer();"}) YES
+	.nav-tabs-custom
+		ul.nav.nav-tabs
+			li.active
+				a(href='#tab_1', data-toggle='tab') Payment To Seller
+			li
+				a(href='#tab_2', data-toggle='tab') Buyer Cash Request
+			li
+				a(href='#tab_3', data-toggle='tab') Complete Payment To Seller
+			li
+				a(href='#tab_4', data-toggle='tab') Complete Buyer Cash Request
+		.tab-content
+			.tab-pane.active#tab_1
+				table.display#listSellerUnpaid&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE
+							th CUSTOMER
+							th SELLER BANK ACCOUNT
+							th TIME ORDER /<br>TIME CLOSE
+							th PRODUCT
+							th COMMISSION<br>(%)
+							th TOTAL
+							th ACTION
+				br
+				center
+					- var id = 'tab1';
+					include ./template_view_loading.jade
+			.tab-pane#tab_2
+				table.display#listBuyerUnpaid&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th CUSTOMER
+							th CUSTOMER BANK ACCOUNT
+							th TIME REQUEST /<br>SLA
+							th AMOUNT
+							th ACTION
+				br
+				center
+					- var id = 'tab2';
+					include ./template_view_loading.jade
+			.tab-pane#tab_3
+				table.display#listSellerPaid&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th STORE
+							th CUSTOMER
+							th SELLER BANK ACCOUNT
+							th TIME ORDER /<br>TIME CLOSE
+							th PRODUCT
+							th COMMISSION<br>(%)
+							th TOTAL
+							th ACTION
+				br
+				center
+					- var id = 'tab3';
+					include ./template_view_loading.jade
+			.tab-pane#tab_4
+				table.display#listBuyerPaid&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th CUSTOMER
+							th CUSTOMER BANK ACCOUNT
+							th TIME REQUEST /<br>SLA
+							th AMOUNT
+							th ACTION
+				br
+				center
+					- var id = 'tab4';
+					include ./template_view_loading.jade

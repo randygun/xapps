@@ -1,0 +1,232 @@
+extends template_layout_app
+
+block css
+	link(rel="stylesheet",href="#{js_cms_fullhost}css/map.css")
+
+block startscript
+	script(src="#{js_cms_fullhost}js/js_cms_store_profile_map.js")
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_store_profile.js")
+
+block breadcrumb
+	button.btn.btn-success.btn-flat.btn.block&attributes({href:"#",onclick:"filterDate();"})
+		i.fa.fa-filter
+		| &nbsp;&nbsp;&nbsp; Filter Date
+
+block content
+	script
+		| var store_id = #{param.store.id};
+		| var store_label = !{JSON.stringify(param.store.login_label)};
+		| var store_data = !{JSON.stringify(param.store.login_data)};
+		| var fromDate = '#{param.fromDate}';
+		| var toDate = '#{param.toDate}';
+	script(async, defer, src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgIfPefRG4bplYPPJKxR_lj13nwkbpaTo&callback=initMap")
+	+modal("modalDelete","Confirmation User Deletion")
+		.modal-body
+			.row
+				.col-xs-12
+					h3 Are you sure want to permanently delete this user?
+			br
+			.row
+				.col-xs-2
+					button.btn.btn-primary.btn-block.btn-flat(onclick="$('#modalDelete').modal('hide');") Cancel
+				.col-xs-8 &nbsp;
+				.col-xs-2
+					button.btn.btn-success.btn-block.btn-flat(onclick="confirmDeleteData();") Yes
+	+modal("modalMap","Store Location")
+		.modal-body
+			.row
+				.col-xs-12
+					#map
+	+modal("modalPIN","Change PIN")
+		.modal-body
+			.row
+				.col-xs-12
+					input#pin(placeholder='PIN',style="width: 100%;",type="number")
+					br
+					br
+					button.btn.btn-primary(style="width: 100%;",onclick="confirmChangePIN();") SAVE
+	+modal("modalFilter","Filter Date")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmSaveFilter(); return false;"})
+						.form-group.has-feedback
+							label From Date
+							br
+							input.form-control#fromDate(placeholder="From Date",type="date",value="2017-01-01")
+							br
+							label To Date
+							br
+							input.form-control#toDate(placeholder="To Date",type="date")
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	.row
+		.col-xs-3
+			.box.box-default
+				.box-body.with-border
+					.img
+						img.profile-user-img.img-responsive.img-circle(src="#{param.store.avatar}")
+					h5.text-center(style="margin-bottom: 0px;")
+						strong= param.store.name
+					h5.text-center(style="margin-top: 0px;") 
+						strong= "ID. "+param.store.id
+					br
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Owner Name
+								.pull-right= param.user.name
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Owner Username
+								.pull-right= param.user.username
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Bank Account
+								.pull-right(style="text-align: right;")!= param.user.rekening		
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Address
+								.pull-right
+									a(href="#showMap",onclick="showMap(#{param.store.id});")= param.store.address
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Phone
+								.pull-right= param.store.phone
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left City
+								.pull-right= param.store.city
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Store Status
+								.pull-right= param.store.is_open
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Store Open Time
+								.pull-right= param.store.time_open+" - "+param.store.time_close
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Store Open Days
+								.pull-right= param.store.days
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Store Rating
+								.pull-right= param.store.rating
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Last Login
+								.pull-right= param.store.time_updateago
+					br
+					strong Login Chart
+					.row
+						.col-xs-12
+							.chart
+								canvas#loginChart(style="width: 100%;")
+					.text-center(style="margin-top: 15px;")
+						if !param.store.is_delete
+							button.btn.btn-danger.btn-block.btn-flat(onclick="suspendStore(#{param.store.id});") Suspend
+						else 
+							button.btn.btn-success.btn-block.btn-flat(onclick="enableStore(#{param.store.id});") Enable
+						if param.store.lock_location
+							button.btn.btn-success.btn-block.btn-flat(onclick="enableChangeLocation(#{param.store.id});") Permit Change Location
+						else
+							button.btn.btn-danger.btn-block.btn-flat(onclick="disableChangeLocation(#{param.store.id});") Disable Change Location
+						button.btn.btn-primary.btn-block.btn-flat(onclick="changePIN(#{param.user.id});") Change PIN
+		.col-xs-9
+			.nav-tabs-custom
+				ul.nav.nav-tabs
+					li.active
+						a(href='#tab_1', data-toggle='tab')	Outstanding Order						
+					li
+						a(href='#tab_2', data-toggle='tab')	Order History
+					li
+						a(href='#tab_3', data-toggle='tab')	Employees						
+					li
+						a(href='#tab_4', data-toggle='tab')	Products
+					li
+						a(href='#tab_5', data-toggle='tab')	Complaints					
+				.tab-content
+					.tab-pane.active#tab_1
+						.row
+							.col-xs-12
+								table.display#tableOutstanding&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th DATE
+											th ID
+											th NAME
+											th ADDRESS
+											th ACTION
+								br
+								center
+									- var id = 'tab1';
+									include ./template_view_loading.jade
+					.tab-pane#tab_2
+						.row
+							.col-xs-12
+								table.display#tableOrder&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th DATE
+											th ID
+											th NAME
+											th ADDRESS
+											th ACTION
+								br
+								center
+									- var id = 'tab2';
+									include ./template_view_loading.jade
+					.tab-pane#tab_3
+						.row
+							.col-xs-12
+								table.display#tableEmployee&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th ID
+											th USERNAME
+											th IS_ACTIVE
+											th ACTION
+								br
+								center
+									- var id = 'tab3';
+									include ./template_view_loading.jade
+					.tab-pane#tab_4
+						.row
+							.col-xs-12
+								table.display#tableProduct&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th ID
+											th CATEGORY
+											th PRODUCT
+											th DESCRIPTION
+											th PRICE
+											th IS ACTIVE
+								br
+								center
+									- var id = 'tab4';
+									include ./template_view_loading.jade
+					.tab-pane#tab_5
+						.row
+							.col-xs-12
+								table.display.dataTable#listComplaints&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th No
+											th Order
+											th Description
+											th Attachments
+											th Is Refund
+											th Time Create

@@ -1,0 +1,14 @@
+.table-striped>tbody>tr:nth-of-type(odd){
+	background-color: unset;
+}
+
+.tmtitle{
+  color: #D9423E;
+}
+.tmtitlegreen{
+  color: #4EA133;
+}
+
+table{
+  background-color: unset;
+}

@@ -1,0 +1,16 @@
+.content-wrapper
+	if !errors
+		section.content-header
+			h1.page-header= title
+			ol.breadcrumb
+				block breadcrumb
+		section.content
+			block content
+	else
+		.content.body
+			.callout.callout-danger.lead
+				h4 Error!
+				p= errors
+	+modal("notificationModal","Notification")
+		.modal-body
+			div#notificationModalContent

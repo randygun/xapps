@@ -1,0 +1,7 @@
+div.adscontainer:hover{
+	background:grey;
+}
+
+img.ads:hover{
+	opacity: 0.5;
+}

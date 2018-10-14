@@ -1,0 +1,169 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_customer_profile.js")
+
+
+block content
+	script
+		| var user_id = #{param.user.id};
+		| var user_label = !{JSON.stringify(param.user.login_label)};
+		| var user_data = !{JSON.stringify(param.user.login_data)};
+	+modal("modalPIN","Change PIN")
+		.modal-body
+			.row
+				.col-xs-12
+					input#pin(placeholder='PIN',style="width: 100%;",type="number")
+					br
+					br
+					button.btn.btn-primary(style="width: 100%;",onclick="confirmChangePIN();") SAVE
+	.row
+		.col-xs-3
+			.box.box-default
+				.box-body.with-border
+					.img
+						img.profile-user-img.img-responsive.img-circle(src="#{param.user.avatar}")
+					h5.text-center(style="margin-bottom: 0px;")
+						strong= param.user.name
+					h5.text-center(style="margin-top: 0px;") 
+						strong= "ID. "+param.user.id
+					.text-center(style="display: none;") Saldo: 
+						span.text-green= "Rp. "+parseInt(param.user.saldo).formatMoney(0)
+					br
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Alamat
+								.pull-right= param.user.address
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Telepon
+								.pull-right= param.user.phone
+					.row(style="margin-bottom: 10px;")
+						.col-xs-12
+							strong
+								.pull-left Last Login
+								.pull-right= param.user.time_updateago
+					br
+					strong Login Chart
+					.row
+						.col-xs-12
+							.chart
+								canvas#loginChart(style="width: 100%;")
+					.text-center(style="margin-top: 15px;")
+						if param.user.is_active
+							button.btn.btn-danger.btn-block.btn-flat(onclick="suspendCustomer(#{param.user.id});") Suspend
+						else 
+							button.btn.btn-success.btn-block.btn-flat(onclick="enableCustomer(#{param.user.id});") Enable
+						button.btn.btn-primary.btn-block.btn-flat(onclick="changePIN(#{param.user.id});") Change PIN
+		.col-xs-9
+			.nav-tabs-custom
+				ul.nav.nav-tabs
+					li.active
+						a(href='#tab_1', data-toggle='tab')	Deposit History						
+					li
+						a(href='#tab_2', data-toggle='tab')	Outstanding Order						
+					li
+						a(href='#tab_3', data-toggle='tab')	Order History
+					li
+						a(href='#tab_4', data-toggle='tab')	Details				
+					li
+						a(href='#tab_5', data-toggle='tab')	Complaints				
+				.tab-content
+					.tab-pane.active#tab_1
+						.row
+							.col-xs-12
+								table.display#tableHistory&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th DATE
+											th TYPE
+											th BANK
+											th REMARK
+											th TYPE
+								br
+								center
+									- var id = 'tab1';
+									include ./template_view_loading.jade
+						.row
+							.col-xs-12
+						.row
+							.col-xs-2 SALDO AWAL
+							.col-xs-10#historysaldoawal : Rp. 0
+						.row
+							.col-xs-2 KREDIT
+							.col-xs-10#historycr : Rp. 0
+						.row
+							.col-xs-2 DEBET
+							.col-xs-10#historydb : Rp. 0
+						.row
+							.col-xs-2 SALDO AKHIR
+							.col-xs-10#historysaldoakhir : Rp. 0
+
+					.tab-pane#tab_2
+						.row
+							.col-xs-12
+								table.display#tableOutstanding&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th DATE
+											th ID
+											th NAME
+											th ADDRESS
+											th ACTION
+								br
+								center
+									- var id = 'tab2';
+									include ./template_view_loading.jade
+					.tab-pane#tab_3
+						.row
+							.col-xs-12
+								table.display#tableOrder&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th DATE
+											th ID
+											th NAME
+											th ADDRESS
+											th ACTION
+								br
+								center
+									- var id = 'tab3';
+									include ./template_view_loading.jade
+					.tab-pane#tab_4
+						.row
+							.col-xs-2
+								| Username
+							.col-xs-10#detailUsername= param.user.username
+						.row
+							.col-xs-2
+								| Name
+							.col-xs-10#detailName= param.user.name
+						.row
+							.col-xs-2
+								| Phone
+							.col-xs-10#detailPhone= param.user.phone
+						.row
+							.col-xs-2
+								| Language
+							.col-xs-10#detailPhone= param.user.language
+						.row
+							.col-xs-2
+								| Bank Details
+							if param.rekening.bank === '-'
+								.col-xs-10#detailBank -
+							else
+								.col-xs-10#detailBank= "Bank "+ param.rekening.bank+", "+param.rekening.number+" a/n "+param.rekening.owner
+					.tab-pane#tab_5
+						.row
+							.col-xs-12
+								table.display.dataTable#listComplaints&attributes({cellspacing:0,width:"100%"})
+									thead
+										tr
+											th No
+											th Order
+											th Description
+											th Attachments
+											th Is Refund
+											th Time Create

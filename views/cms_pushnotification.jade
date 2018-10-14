@@ -1,0 +1,44 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_pushnotification.js")
+
+block breadcrumb
+	button.btn.btn-success.btn-flat.btn.block&attributes({href:"#",onclick:"$('#modalCompose').modal('show');"})
+		i.fa.fa-filter
+		| &nbsp;&nbsp;&nbsp; Compose Notification
+
+block content
+	.box.box-success
+		.box-header.with-border
+			table.display#listNotification&attributes({cellspacing:0,width:"100%"})
+				thead
+					tr
+						th No
+						th Job
+						th Title
+						th Message
+						th Time Create
+						th Recipient
+		include ./template_view_loading.jade
+	+modal("modalCompose","Send Notification")
+		.modal-body
+			.row
+				.col-xs-12
+					label Recipient
+					select.form-control#recipient(style="width:100%;")
+						option(value="all") All
+						option(value="buyer") Buyer
+						option(value="seller") Seller
+			br
+			.row
+				.col-xs-12
+					input.form-control#title(style="width:100%;",placeholder="Title")
+			br
+			.row
+				.col-xs-12
+					textarea#message(rows=10, placeholder="Message", style="width:100%;")
+			br
+			.row
+				.col-xs-12
+					button.btn.btn-primary.btn-block.btn-flat(onclick="submitNotification();") Submit

@@ -1,0 +1,13 @@
+script
+	| var js_cms_fullhost = "#{js_cms_fullhost}";
+	| var js_cms_project = "#{param_jade.project}";
+script(src="#{js_cms_fullhost}js/modernizr.js")
+script(src="#{js_cms_fullhost}js/yepnope.js")
+script(src="#{js_cms_fullhost}js/tools.js")
+script(src="#{js_cms_fullhost}plugins/chartjs/Chart.min.js")
+script(src="#{js_cms_fullhost}plugins/datatables/jquery.dataTables.min.js")
+script(src="#{js_cms_fullhost}plugins/datatables/dataTables.bootstrap.min.js")
+script(src="#{js_cms_fullhost}plugins/select2/select2.full.min.js")
+script(src="#{js_cms_fullhost}js/standalone/selectize.js")
+script(src="#{js_cms_fullhost}plugins/datepicker/bootstrap-datepicker.js")
+block scripts

@@ -1,0 +1,61 @@
+extends template_layout_app
+
+block css
+	link(rel="stylesheet",href="#{js_cms_fullhost}css/map.css")
+
+block startscript
+	script(src="#{js_cms_fullhost}js/js_cms_home_map.js")
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_home.js")
+
+
+block content
+	.row
+		.col-xs-12
+			.box.box-primary
+				.box-body
+					.form-group
+						label Store Name / Address
+						select#searchStore.form-control.select2.select2-hidden-accessible(style="width: 100%")
+	.row
+		.col-xs-12
+			.box.box-success
+				.box-header.with-border
+					h3.box-title Store Locations
+				.box-body
+					#map
+					script(async, defer, src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgIfPefRG4bplYPPJKxR_lj13nwkbpaTo&callback=initMap")
+	.row
+		.col-xs-3
+			.box.box-danger
+				.box-header.with-border.info-box
+					span.info-box-icon.bg-red
+						i.ion.ion-heart
+					.info-box-content
+						span.info-box-text API Concurrent
+						span#concurrent_api.info-box-number
+		.col-xs-3
+			.box.box-primary
+				.box-header.with-border.info-box
+					span.info-box-icon.bg-blue
+						i.ion.ion-icecream
+					.info-box-content
+						span.info-box-text Registered Seller
+						span#registeredseller.info-box-number
+		.col-xs-3
+			.box.box-success
+				.box-header.with-border.info-box
+					span.info-box-icon.bg-green
+						i.ion.ion-person-stalker
+					.info-box-content
+						span.info-box-text Verified Buyer
+						span#registeredbuyer.info-box-number
+		.col-xs-3
+			.box.box-warning
+				.box-header.with-border.info-box
+					span.info-box-icon.bg-yellow
+						i.ion.ion-ios-location
+					.info-box-content
+						span.info-box-text Un-Verified Buyer
+						span#unregisteredbuyer.info-box-number

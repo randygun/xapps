@@ -1,0 +1,74 @@
+extends template_layout_app
+
+block scripts
+	script(src="#{js_cms_fullhost}js/js_cms_store_main.js")
+
+block breadcrumb
+	button.btn.btn-success.btn-flat.btn.block&attributes({href:"#",onclick:"filterDate();"})
+		i.fa.fa-filter
+		| &nbsp;&nbsp;&nbsp; Filter Date
+	| &nbsp;&nbsp;&nbsp;
+	button.btn.btn-primary.btn-flat.btn.block&attributes({href:"#",onclick:"generateReport();"})
+		i.fa.fa-plus
+		| &nbsp;&nbsp;&nbsp; Generate Report		
+
+block content
+	script
+		| var fromDate = '#{param.fromDate}';
+		| var toDate = '#{param.toDate}';
+	+modal("modalFilter","Filter Date")
+		.modal-body
+			.row
+				.col-xs-12
+					form&attributes({onsubmit:"confirmSaveFilter(); return false;"})
+						.form-group.has-feedback
+							label From Date
+							br
+							input.form-control#fromDate(placeholder="From Date",type="date",value="2017-01-01")
+							br
+							label To Date
+							br
+							input.form-control#toDate(placeholder="To Date",type="date")
+						button.btn.btn-primary.btn-block.btn-flat&attributes({type:"submit"}) SAVE
+	.nav-tabs-custom
+		ul.nav.nav-tabs
+			li.active
+				a(href='#tab_1', data-toggle='tab') Toko
+			li
+				a(href='#tab_2', data-toggle='tab') Blacklist
+		.tab-content
+			.tab-pane.active#tab_1
+				table.display#listStore&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th NAME
+							th ADDRESS
+							th PHONE
+							th
+								div(align="right") TOTAL TRANSACTION
+							th
+								div(align="right") TOTAL OMZET
+							th ACTION
+				br
+				center
+					- var id = 'tab1';
+					include ./template_view_loading.jade
+			.tab-pane#tab_2
+				table.display#listStoreBlocked&attributes({cellspacing:0,width:"100%"})
+					thead
+						tr
+							th ID
+							th NAME
+							th ADDRESS
+							th PHONE
+							th
+								div(align="right") TOTAL TRANSACTION
+							th
+								div(align="right") TOTAL OMZET
+							th ACTION
+				br
+				center
+					- var id = 'tab2';
+					include ./template_view_loading.jade
+	
